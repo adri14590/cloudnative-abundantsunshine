@@ -2,23 +2,25 @@ kind: Service
 apiVersion: v1
 metadata:
   name: connectionsposts-svc
+  namespace: cloud-native-statelessness    
 spec:
   selector:
     app: connectionsposts
   ports:
   - protocol: "TCP"
-    port: 80
+    port: 8082
     targetPort: 8080
-  type: NodePort
+  type: LoadBalancer
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: connectionsposts
+  namespace: cloud-native-statelessness    
   labels:
     app: connectionsposts
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: connectionsposts
@@ -38,8 +40,8 @@ spec:
           - name: PORT
             value: "8080"
           - name: CONNECTIONPOSTSCONTROLLER_POSTSURL
-            value: "<insert posts url here>/posts?userIds="
+            value: "http://172.17.0.5:8080/posts?userIds="
           - name: CONNECTIONPOSTSCONTROLLER_CONNECTIONSURL
-            value: "<insert connections url here>/connections/"
+            value: "http://172.17.0.3:8080/connections/"
           - name: CONNECTIONPOSTSCONTROLLER_USERSURL
-            value: "<insert connections url here>/users/"
+            value: "http://172.17.0.3:8080/users/"
