@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: posts-svc
+  namespace: cloud-native-appconfig      
 spec:
   selector:
     app: posts
@@ -11,10 +12,11 @@ spec:
     targetPort: 8080
   type: NodePort
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: posts
+  namespace: cloud-native-appconfig      
   labels:
     app: posts
 spec:
@@ -36,8 +38,10 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
           - name: SPRING_APPLICATION_JSON
-            value: '{"spring":{"datasource":{"url":"jdbc:mysql://192.168.99.100:30917/cookbook"}}}'
+            value: '{"spring":{"datasource":{"url":"jdbc:mysql://mysql-svc:3306/cookbook"}}}'
           - name: SPRING_APPLICATION_NAME
             value: "mycookbook"
           - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://192.168.99.100:31868"
+            value: "http://sccs-svc:8888"
+          - name: SPRING_PROFILES_ACTIVE
+            value: "dev"

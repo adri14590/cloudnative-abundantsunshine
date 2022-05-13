@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: mysql-svc
+  namespace: cloud-native-appconfig      
 spec:
   selector:
     app: mysql
@@ -11,10 +12,11 @@ spec:
     targetPort: 3306
   type: NodePort
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: mysql
+  namespace: cloud-native-appconfig      
   labels:
     app: mysql
 spec:
