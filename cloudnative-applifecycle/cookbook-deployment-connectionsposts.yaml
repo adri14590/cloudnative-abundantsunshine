@@ -2,19 +2,21 @@ kind: Service
 apiVersion: v1
 metadata:
   name: connectionsposts-svc
+  namespace: cloud-native-applifecycle
 spec:
   selector:
     app: connectionsposts
   ports:
   - protocol: "TCP"
-    port: 80
+    port: 8082
     targetPort: 8080
-  type: NodePort
+  type: LoadBalancer
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: connectionsposts
+  namespace: cloud-native-applifecycle
   labels:
     app: connectionsposts
 spec:
@@ -42,18 +44,18 @@ spec:
               fieldRef:
                 fieldPath: status.podIP
           - name: CONNECTIONPOSTSCONTROLLER_POSTSURL
-            value: "http://192.168.99.100:32119/posts?userIds="
+            value: "http://posts-svc/posts?userIds="
           - name: CONNECTIONPOSTSCONTROLLER_CONNECTIONSURL
-            value: "http://192.168.99.100:30955/connections/"
+            value: "http://connections-svc/connections/"
           - name: CONNECTIONPOSTSCONTROLLER_USERSURL
-            value: "http://192.168.99.100:30955/users/"
+            value: "http://connections-svc/users/"
           - name: REDIS_HOSTNAME
-            value: "192.168.99.100"
+            value: "redis-svc"
           - name: REDIS_PORT
-            value: "31537"
+            value: "6379"
           - name: SPRING_APPLICATION_NAME
             value: "mycookbook"
           - name: SPRING_CLOUD_CONFIG_URI
-            value: "http://192.168.99.100:30455"
+            value: "http://sccs-svc:8888"
           - name: VERSIONING_TRIGGER
             value: "2"
