@@ -2,19 +2,21 @@ kind: Service
 apiVersion: v1
 metadata:
   name: connectionsposts-svc
+  namespace: cloudnative-servicediscovery
 spec:
   selector:
     app: connectionsposts
   ports:
   - protocol: "TCP"
-    port: 80
+    port: 8082
     targetPort: 8080
-  type: NodePort
+  type: LoadBalancer
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: connectionsposts
+  namespace: cloudnative-servicediscovery
   labels:
     app: connectionsposts
 spec:

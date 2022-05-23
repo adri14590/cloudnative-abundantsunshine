@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: connections-svc
+  namespace: cloudnative-servicediscovery
 spec:
   selector:
     app: connections
@@ -11,10 +12,11 @@ spec:
     targetPort: 8080
   type: NodePort
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: connections
+  namespace: cloudnative-servicediscovery
   labels:
     app: connections
 spec:

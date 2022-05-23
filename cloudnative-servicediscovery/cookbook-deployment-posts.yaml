@@ -2,6 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: posts-svc
+  namespace: cloudnative-servicediscovery
 spec:
   selector:
     app: posts
@@ -11,10 +12,11 @@ spec:
     targetPort: 8080
   type: NodePort
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: posts
+  namespace: cloudnative-servicediscovery
   labels:
     app: posts
 spec:
@@ -30,7 +32,7 @@ spec:
     spec:
       containers:
       - name: posts
-        image: cdavisafc/cloudnative-applifecycle-posts:0.0.2
+        image: adri14590/cloudnative-applifecycle-posts:0.0.2
         livenessProbe:
           httpGet:
             path: /healthz
